@@ -1,10 +1,10 @@
 <script setup>
-
+import NotionMenu from './components/NotionMenu.vue';
 </script>
 
 <template>
-  <div class="h-full bg-red-500">
-    <h1>Inicio</h1>
+  <div class="h-full">
+    <NotionMenu />
   </div>
 </template>
 
