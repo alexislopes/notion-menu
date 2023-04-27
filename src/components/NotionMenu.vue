@@ -1,6 +1,6 @@
 <template>
-<div class="absolute flex justify-center items-center relative font-sans">
-  <div :class="['menu', {active: toggle}]">
+<div class="menu-container">
+  <div :class="['menu', { active: value }]" ref="menu">
     <div class="search">
       <input placeholder="Search actions" type="text">
     </div>
@@ -56,35 +56,41 @@
       <div>Add to favorites</div>
     </div>
     <hr class="devider">
-    <div class="flex flex-col gap-1 text-sm text-[#9a9a99] mt-1">
+    <div class="last-edited">
       <span>Last edited by Alexis Lopes</span>
       <span>Apr 16, 2023, 10:00 PM</span>
     </div>
   </div>
-  <Bento @click="toggle = !toggle" class="text-[#7e7e87] px-1 py-1.5 hover:bg-[#efefef] rounded cursor-grab" />
+  <Bento @click="toggle()" class="bento" />
 </div>
 </template>
 
 <script setup>
+import { onClickOutside, useToggle } from "@vueuse/core";
 import { ref } from "vue";
-import Bento from "./icons/Bento.vue";
-import Copy from "./icons/Copy.vue";
-import Duplicate from "./icons/Duplicate.vue";
-import Edit from "./icons/Edit.vue";
-import Favorite from "./icons/Favorite.vue";
-import Move from "./icons/Move.vue";
-import SidePeek from "./icons/SidePeek.vue";
-import TrashBin from "./icons/TrashBin.vue";
-import UpAngledArrow from "./icons/UpAngledArrow.vue";
 
-const toggle = ref(false)
+const menu = ref(undefined)
+const [value, toggle] = useToggle()
+
+onClickOutside(menu, () => {
+  value.value = false
+})
 </script>
 
 <style scoped>
+.menu-container {
+  @apply absolute flex justify-center items-center relative font-sans
+}
+.last-edited {
+  @apply flex flex-col gap-1 text-sm text-[#9a9a99] mt-1
+}
+.bento {
+  @apply text-[#7e7e87] px-1 py-1.5 hover:bg-[#efefef] rounded cursor-grab
+}
 
 .menu {
- @apply p-2 shadow shadow-md min-w-[15vw] rounded-md border-1 border-[#4d4d4d] absolute right-0 mr-9 flex gap-0.5 opacity-0 flex-col;
- border: 1px solid #e3e3e3;
+ @apply p-2 shadow shadow-md min-w-[15vw] rounded-md border-1 border-[#e3e3e3] border-solid
+  absolute right-0 mr-9 flex gap-0.5 opacity-0 flex-col hidden;
  animation: fadeOut 0.3s;
 }
 
@@ -112,8 +118,7 @@ const toggle = ref(false)
 }
 
 .search {
-  @apply p-1 bg-[#f7f7f5] border flex items-center rounded p-2 my-2;
-  border: 1px solid #e0e0df
+  @apply p-1 bg-[#f7f7f5] border-1 border-solid border-[#e0e0df] flex items-center rounded p-2 my-2;
 }
 
 .search input {
@@ -121,8 +126,7 @@ const toggle = ref(false)
 }
 
 .devider {
-  @apply m-1;
-  border: 0.3px solid #ededec
+  @apply m-1 border-[0.3px] border-solid border-[#ededec];
 }
 
 
@@ -140,7 +144,6 @@ const toggle = ref(false)
 @keyframes fadeOut {
   0% {
     opacity: 1;
-    
   }
 
   100% {
